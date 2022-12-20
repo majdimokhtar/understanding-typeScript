@@ -1,13 +1,21 @@
-function add(n1: number, n2: number) {
-  return n1 + n2
+let userInput: unknown
+let userName : string
+
+
+if(typeof  userInput === "string"){
+    userName =userInput
 }
 
-function printResult(num: number) {
-  console.log("Result" + num)
+function generateErr(message : string,code:number){
+throw {message : message ,errcode:code}
+
 }
+const res = generateErr("error!!!!",500)
+console.log(res);
 
-let combineValue: (a: number, b: number) => number
 
-combineValue = add
+// const button = document.querySelector(".button")
 
-printResult(combineValue(5, 12))
+// button.addEventListener("click",()=>{
+//     console.log("clicked");
+// })
