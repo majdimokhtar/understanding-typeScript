@@ -1,16 +1,19 @@
 // Code goes here!
 
-class Department {
+abstract class Department {
+  static fiscalYear = 2022
   // private id: string
   // private name: string
   protected employees: string[] = []
 
-  constructor(private readonly id: string, public name: string) {
+  constructor(protected readonly id: string, public name: string) {
     // this.id = id
     // this.name = n
   }
-  describe(this: Department) {
-    console.log(`Department (${this.id}):(${this.name})`)
+  abstract describe(this: Department): void
+
+  static createEmployee(name: string) {
+    return { name: name }
   }
 
   addEmployee(employee: string) {
@@ -28,9 +31,14 @@ class ITDepartment extends Department {
     super(id, "Accounting")
     this.admins = admins
   }
+
+  describe() {
+    console.log("It department :" + this.id)
+  }
 }
 class AccountingDepartment extends Department {
   private lastReport: string
+  private static instance : AccountingDepartment
   get mostRecentReport() {
     if (this.lastReport) {
       return this.lastReport
@@ -43,14 +51,25 @@ class AccountingDepartment extends Department {
     }
     this.addReports(value)
   }
-  constructor(id: string, private reports: string[]) {
+  private constructor(id: string, private reports: string[]) {
     super(id, "IT")
     this.lastReport = this.reports[0]
+  }
+  static getInstance(){
+    if (this.instance) {
+      return this.instance
+    }
+    this.instance = new AccountingDepartment("d2", [])
+    return this.instance
+  }
+  describe() {
+    console.log(`Accounting department (${this.id})`)
   }
   addReports(text: string) {
     this.reports.push(text)
     this.lastReport = text
   }
+
   addEmployee(name: string) {
     if (name === "Majdi") {
       return
@@ -65,6 +84,8 @@ class AccountingDepartment extends Department {
   }
 }
 
+const employee1 = Department.createEmployee("Majdi employee")
+console.log(employee1, Department.fiscalYear)
 const it = new ITDepartment("d1", ["Majdi"])
 
 it.addEmployee("Majdi")
@@ -74,7 +95,7 @@ it.printEmployeeInfo()
 
 console.log(it)
 
-const accounting = new AccountingDepartment("d2", [])
+const accounting = AccountingDepartment.getInstance()
 accounting.mostRecentReport = "sssss"
 accounting.addReports("something")
 accounting.printReports()
@@ -82,5 +103,7 @@ accounting.addEmployee("Majdi")
 accounting.addEmployee("Mokhtar")
 accounting.printEmployee()
 console.log(accounting.mostRecentReport)
+
+accounting.describe()
 
 // it.describe()
