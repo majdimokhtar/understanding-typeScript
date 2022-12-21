@@ -1,11 +1,23 @@
-interface Greatable {
-  readonly name: string
+interface AddFn{
+  (a:number,b:number):number
+}
+let add : AddFn
+add=(n1 :number,n2:number)=>{
+  return n1+n2
+}
 
+
+interface Named {
+  outputName? :string
+  readonly name?: string
+}
+
+interface Greatable extends Named {
   greet(phrase: string): void
 }
 
-class Person implements Greatable  {
-  name : string
+class Person implements Greatable ,Named  {
+  name? : string
   constructor(n:string){
     this.name = n
   }
