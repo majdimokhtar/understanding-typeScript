@@ -41,7 +41,7 @@ function extractAndConvert<
 
 // extractAndConvert({ name: "Majdi" }, "name")
 
-class dataStorage<T> {
+class dataStorage<T extends string | number | boolean> {
   private data: T[] = []
   additem(item: T) {
     this.data.push(item)
