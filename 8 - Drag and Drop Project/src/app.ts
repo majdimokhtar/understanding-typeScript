@@ -1,3 +1,47 @@
+//validation
+interface Validatble {
+  value: string | number
+  required?: boolean
+  minLength?: number
+  maxLength?: number
+  min?: number
+  max?: number
+}
+
+function validate(validatbleInput: Validatble) {
+  let isValid = true
+  if (validatbleInput.required) {
+    isValid = isValid && validatbleInput.value.toString().trim().length !== 0
+  }
+  if (
+    validatbleInput.minLength != null &&
+    typeof validatbleInput.value === "string"
+  ) {
+    isValid =
+      isValid && validatbleInput.value.length > validatbleInput.minLength
+  }
+  if (
+    validatbleInput.maxLength != null &&
+    typeof validatbleInput.value === "string"
+  ) {
+    isValid =
+      isValid && validatbleInput.value.length < validatbleInput.maxLength
+  }
+  if (
+    validatbleInput.min != null &&
+    typeof validatbleInput.value === "number"
+  ) {
+    isValid = isValid && validatbleInput.value > validatbleInput.min
+  }
+  if (
+    validatbleInput.max != null &&
+    typeof validatbleInput.value === "number"
+  ) {
+    isValid = isValid && validatbleInput.value < validatbleInput.max
+  }
+  return isValid
+}
+
 // autobind decorator
 
 function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
@@ -45,10 +89,26 @@ class ProjectInput {
     const entredTitle = this.titleInputElement.value
     const entredDesc = this.descInputElement.value
     const entredPeople = this.peopleInputElement.value
+
+    const titleValidatble: Validatble = {
+      value: entredTitle,
+      required: true,
+    }
+    const descriptionValidatble: Validatble = {
+      value: entredDesc,
+      required: true,
+      minLength : 5
+    }
+    const peopleValidatble: Validatble = {
+      value: +entredPeople,
+      required: true,
+      min: 1,
+      max: 5,
+    }
     if (
-      entredTitle.trim().length === 0 ||
-      entredDesc.trim().length === 0 ||
-      entredPeople.trim().length === 0
+      !validate(titleValidatble) ||
+      !validate(descriptionValidatble) ||
+      !validate(peopleValidatble)
     ) {
       alert("invalid Input please try again")
       return
@@ -62,13 +122,13 @@ class ProjectInput {
     event.preventDefault()
     const userInput = this.gatherUserInput()
     console.log(this.titleInputElement.value)
-    if(Array.isArray(userInput)){
-      const [title , description,people] = userInput
-      console.log(title , description,people);
+    if (Array.isArray(userInput)) {
+      const [title, description, people] = userInput
+      console.log(title, description, people)
       this.clearInput()
     }
   }
-  private clearInput(){
+  private clearInput() {
     this.titleInputElement.value = ""
     this.descInputElement.value = ""
     this.peopleInputElement.value = ""
